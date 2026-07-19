@@ -10,21 +10,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { loginAction } from "../_actions/authAction";
+import { loginAction, LoginState } from "../_actions/authAction";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
 
 const LoginFrom = () => {
+  const router = useRouter()
   const [state, action, pending] = useActionState(loginAction, false);
 
   useEffect(() => {
     if (!state) return
     if (state.success) {
       toast.success(state.message || "Login Successfull")
+      router.push('/user-dashboard')
     }
    else{
      toast.error(state.message || "Login Failed")
-   }
+    
+    }
    
   }, [state])
 
