@@ -1,39 +1,53 @@
-"use client"
+"use client";
 
-import { CardContent } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Input } from '@base-ui/react'
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { loginAction } from "../_actions/authAction";
 
 const LoginFrom = () => {
   return (
-    
-        <form>
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <a
-                  href="#"
-                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                >
-                  Forgot your password?
-                </a>
-              </div>
-              <Input id="password" type="password" required />
-            </div>
-          </div>
-        </form>
-     
-  )
-}
+    <form action={loginAction} className="space-y-4 w-full max-w-sm">
+      <Card className="">
+        <CardHeader className="">
+          <CardTitle>Login to your account</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+          <CardAction>
+            <Button variant="link">Sign Up</Button>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Input
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+            required
+          />
+          <Input
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            required
+          />
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
+          <Button variant="outline" className="w-full">
+            Login with Google
+          </Button>
+        </CardContent>
+      </Card>
+    </form>
+  );
+};
 
-export default LoginFrom
+export default LoginFrom;
