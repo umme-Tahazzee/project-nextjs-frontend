@@ -11,10 +11,25 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { loginAction } from "../_actions/authAction";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const LoginFrom = () => {
+  const [state, action, pending] = useActionState(loginAction, false);
+
+  useEffect(() => {
+    if (!state) return
+    if (state.success) {
+      toast.success(state.message || "Login Successfull")
+    }
+   else{
+     toast.error(state.message || "Login Failed")
+   }
+   
+  }, [state])
+
   return (
-    <form action={loginAction} className="space-y-4 w-full max-w-sm">
+    <form action={action} className="space-y-4 w-full max-w-sm">
       <Card className="">
         <CardHeader className="">
           <CardTitle>Login to your account</CardTitle>
@@ -39,9 +54,9 @@ const LoginFrom = () => {
             required
           />
           <Button type="submit" className="w-full">
-            Login
+            {pending ? 'Submitting...' : 'Login'}
           </Button>
-          <Button variant="outline" className="w-full">
+          <Button type="button" variant="outline" className="w-full">
             Login with Google
           </Button>
         </CardContent>
