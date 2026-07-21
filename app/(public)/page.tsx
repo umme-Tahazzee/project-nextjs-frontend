@@ -1,12 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+
+import { getMe } from "@/services/getMe";
 
 
-export default function Home() {
+export default async function Home () {
+  const user = await getMe()
+  // console.log(user, 'me');
+  
   return (
     <div>
-        <Button variant={"outline"}>Click</Button>
-   
+    karia
     </div>
   );
 }

@@ -16,9 +16,19 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 
+const initialState: LoginState = {
+  success: false,
+  statusCode: 0,
+  message: "",
+  data: {
+    accessToken: "",
+    refreshToken: "",
+  },
+};
+
 const LoginFrom = () => {
-  const router = useRouter()
-  const [state, action, pending] = useActionState(loginAction, false);
+
+  const [state, action, pending] = useActionState(loginAction, initialState);
 
   useEffect(() => {
     if (!state) return
