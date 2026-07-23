@@ -1,133 +1,148 @@
 "use client";
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ChevronDown,
-  Settings,
-  LogOut,
-  User,
-  HelpCircle,
-  LucideIcon,
-} from "lucide-react";
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuLink,
-} from "../ui/navigation-menu";
+// import { logout } from "@/service/logout";
+import { LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
 
-interface MenuAction {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-  onClick?: () => void;
-  variant?: "default" | "destructive";
+// Navigation items configuration
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Contact", href: "/contact" },
+];
+
+// User menu items configuration
+const userMenuItems = [
+  { label: "Profile", icon: User, action: "profile" },
+  { label: "Settings", icon: Settings, action: "settings" },
+];
+
+type IUser = {
+    success : boolean,
+    message : string,
+    data : {
+        profile : {
+            id : string,
+            name : string,
+            email : string,
+            activeStatus : string,
+            role : string,
+            createdAt : string,
+            updatedAt : string,
+            profile : {
+                id : string,
+                profilePhoto : string,
+                bio : string | null,
+                userId : string,
+                createdAt : string,
+                updatedAt : string
+            }
+        }
+    }
 }
 
-interface NavLink {
-  id: string;
-  label: string;
-  href: string;
+type NavbarProps = {
+    user : IUser
 }
 
-const menuItems: MenuAction[] = [
-  { id: "profile", label: "Profile", icon: User },
-  { id: "settings", label: "Settings", icon: Settings },
-  { id: "help", label: "Help & Support", icon: HelpCircle },
-];
+export function Navbar({user} : NavbarProps) {
+    const router = useRouter()
+  const handleUserMenuAction = async (action: string) => {
 
-const destructiveItems: MenuAction[] = [
-  { id: "logout", label: "Log out", icon: LogOut, variant: "destructive" },
-];
+    // if(action === "logout"){
+    //     await logout();
+    //     toast.success("User Logged Out Successfully!");
+    //     router.push("/login");
+    // }
+  };
 
-const navLinks: NavLink[] = [
-  { id: "about", label: "About", href: "/about" },
-  { id: "services", label: "Services", href: "/services" },
-  { id: "contact", label: "Contact", href: "/contact" },
-];
-
-export function Navbar() {
   return (
-    <nav className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <span className="text-lg font-bold text-primary-foreground">
-              P
+    <nav className="border-b border-border">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link href="/" className="shrink-0">
+            <span className="text-2xl font-bold text-primary">
+              NextJs Press
             </span>
-          </div>
-          <span className="text-xl font-semibold tracking-tight text-foreground">
-            Press
-          </span>
-        </Link>
+          </Link>
 
-        {/* Nav links */}
-        <NavigationMenu className="hidden md:flex">
-          <NavigationMenuList className="flex items-center gap-1">
-            {navLinks.map((item) => (
-              <NavigationMenuItem key={item.id}>
-                <NavigationMenuLink
-                  href={item.href}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  {item.label}
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+          {/* Nav Links */}
+          <div className="hidden md:absolute md:left-1/2 md:transform md:-translate-x-1/2 md:flex md:items-center md:gap-8">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-foreground hover:text-primary transition-colors text-sm font-medium"
+              >
+                {item.label}
+              </Link>
             ))}
-          </NavigationMenuList>
-        </NavigationMenu>
+          </div>
 
-        {/* Account dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full border border-border py-1 pl-1 pr-3 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
-              <User className="size-4 text-muted-foreground" />
-            </span>
-            <ChevronDown className="size-4 text-muted-foreground" />
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>Account</DropdownMenuLabel>
+          {/* User Dropdown */}
+          {
+            user.success ? (
+                <DropdownMenu>
+            <DropdownMenuTrigger >
+              <div className="cursor-pointer">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <User className="w-4 h-4 text-primary" />
+                </div>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-medium">
+                    {user.data?.profile.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {user.data?.profile.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {menuItems.map(({ id, label, icon: Icon, onClick }) => (
-                <DropdownMenuItem key={id} onClick={onClick} className="gap-2">
-                  <Icon className="size-4" />
-                  <span>{label}</span>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuGroup>
-
-            <DropdownMenuSeparator />
-
-            <DropdownMenuGroup>
-              {destructiveItems.map(({ id, label, icon: Icon, onClick, variant }) => (
-                <DropdownMenuItem
-                  key={id}
-                  variant={variant as "destructive"}
-                  onClick={onClick}
-                  className="gap-2"
-                >
-                  <Icon className="size-4" />
-                  <span>{label}</span>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              {userMenuItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <DropdownMenuItem
+                    key={item.action}
+                    onClick={() => handleUserMenuAction(item.action)}
+                  >
+                    <Icon className="w-4 h-4 mr-2" />
+                    <span>{item.label}</span>
+                  </DropdownMenuItem>
+                );
+              })}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={async () => {
+                await handleUserMenuAction("logout");
+              }}>
+                <LogOut className="w-4 h-4 mr-2" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+              </DropdownMenu>
+            ) : <Link href={"/login"} >
+                   <Button className="cursor-pointer">
+                        Login
+                   </Button>
+            </Link>
+          }
+        </div>
       </div>
     </nav>
   );

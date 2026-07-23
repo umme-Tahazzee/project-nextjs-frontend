@@ -4,7 +4,7 @@ import { getMe } from "@/services/getMe"
 import React from "react"
 
 
-const DashboardLayout = async({children}:{ children: React.ReactNode}) => {
+const  PublicLayout = async({children}:{ children: React.ReactNode}) => {
   const user = await getMe()
   return (
     <div>
@@ -14,4 +14,4 @@ const DashboardLayout = async({children}:{ children: React.ReactNode}) => {
   )
 }
 
-export default DashboardLayout
+export default PublicLayout

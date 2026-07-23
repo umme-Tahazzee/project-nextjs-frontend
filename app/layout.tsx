@@ -3,7 +3,7 @@ import { Geist, Geist_Mono, Inter, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
-import { Navbar } from "@/components/shared/navbar";
+
 
 const dmSansHeading = DM_Sans({
   subsets: ["latin"],
@@ -46,11 +46,9 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
-        
-          <Navbar/>
+        <Toaster position="top-right" richColors />
           {children}
        
-        <Toaster position="top-right" richColors />
       </body>
     </html>
   );

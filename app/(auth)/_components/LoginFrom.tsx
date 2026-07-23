@@ -13,8 +13,6 @@ import { Input } from "@/components/ui/input";
 import { loginAction, LoginState } from "../_actions/authAction";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-
 
 const initialState: LoginState = {
   success: false,
@@ -34,8 +32,8 @@ const LoginFrom = () => {
     if (!state) return
     if (state.success) {
       toast.success(state.message || "Login Successfull")
-      // router.push('/user-dashboard')
     }
+    
    else{
      toast.error(state.message || "Login Failed")
     
