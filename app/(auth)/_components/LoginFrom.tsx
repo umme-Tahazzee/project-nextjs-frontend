@@ -29,15 +29,15 @@ const LoginFrom = () => {
   const [state, action, pending] = useActionState(loginAction, initialState);
 
   useEffect(() => {
-    if (!state) return
+    if (!state || !state.message) return
     if (state.success) {
-      toast.success(state.message || "Login Successfull")
+      toast.success("Login Successfull")
+      
     }
     
-   else{
+  if(!state.success){
      toast.error(state.message || "Login Failed")
-    
-    }
+  }
    
   }, [state])
 
