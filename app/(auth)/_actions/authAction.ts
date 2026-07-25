@@ -1,6 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 export type LoginState = {
   success: boolean;
@@ -12,11 +13,16 @@ export type LoginState = {
   };
 };
 
+
+
+
+
+
 export const loginAction = async (
   prevState: LoginState,
   formData: FormData,
 ) => {
-  console.log(prevState, 'prevState');
+
 
   const email = formData.get("email");
   const password = formData.get("password");
@@ -48,7 +54,20 @@ export const loginAction = async (
       maxAge: 60 * 60 * 24 * 7,
       sameSite: "lax",
     });
-    redirect('/user-dashboard');
+
+
+    
+
+    const decodedToken = jwt.decode(result.data.acesstoken) as JwtPayload
+    if(decodedToken.role === 'USER'){
+        redirect('/user-dashboard');
+    }else if(decodedToken.role === 'ADMIN'){
+       redirect('/admin-dashboard')
+    }else if(decodedToken.role === 'AUTHOR'){
+       redirect('/author-dashboard')
+    }
+     
+    
   }
 
   
