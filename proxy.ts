@@ -4,17 +4,23 @@ import type { NextRequest } from 'next/server'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
 const AUTH_ROUTES = ['/login', '/register']
+const PUBLIC_ROUTES = ['/', '/news']
+
 export function proxy(request: NextRequest) {
     const pathName = request.nextUrl.pathname
+
+
     const accessToken = request.cookies.get('accessToken')?.value
+
+
     const decodedToken = accessToken ? jwt.decode(accessToken) as JwtPayload : null
-    // console.log(accessToken, "accessToken");
+
 
     let userRole = null
     if (decodedToken) {
         userRole = decodedToken.role
     }
-    
+
     //user is login 
     if (accessToken && AUTH_ROUTES.includes(pathName)) {
         if (userRole === 'USER') {
@@ -28,6 +34,14 @@ export function proxy(request: NextRequest) {
         }
     }
 
+    const isPublic = PUBLIC_ROUTES.some((route) => pathName === route || pathName.startsWith(route + "/"))
+    const isAuthRoute = AUTH_ROUTES.some((route) => pathName === route || pathName.startsWith(route + "/"))
+   
+   //Authenticate pages protection
+
+    if (!accessToken  && !isAuthRoute && !isPublic) {
+            return NextResponse.redirect(new URL('/login', request.url))
+    }
     return NextResponse.next()
 }
 
