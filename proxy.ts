@@ -1,24 +1,32 @@
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextRequest } from 'next/server'
 import jwt, { JwtPayload } from 'jsonwebtoken'
+import { jwtUtils } from './utils/jwt'
 
 const AUTH_ROUTES = ['/login', '/register']
 const PUBLIC_ROUTES = ['/', '/news']
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const pathName = request.nextUrl.pathname
 
-
+    const cookieStore = await cookies()
     const accessToken = request.cookies.get('accessToken')?.value
 
 
-    const decodedToken = accessToken ? jwt.decode(accessToken) as JwtPayload : null
+    const decodedToken = accessToken ? jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string) : null
 
 
     let userRole = null
-    if (decodedToken) {
-        userRole = decodedToken.role
+    if (decodedToken?.success && decodedToken.data) {
+        userRole = (decodedToken.data as JwtPayload).role 
+    }
+
+    if(!decodedToken?.success ){
+        //token has expire
+        cookieStore.delete('accessToken')
+        return NextResponse.redirect(new URL('/login', request.url))
+        
     }
 
     //user is login 
@@ -42,6 +50,17 @@ export function proxy(request: NextRequest) {
     if (!accessToken  && !isAuthRoute && !isPublic) {
             return NextResponse.redirect(new URL('/login', request.url))
     }
+
+    // Authorization : role based access control
+    if(pathName.startsWith('/user-dashboard') && userRole !== 'USER'){
+        return NextResponse.redirect(new URL('/not-found', request.url))
+    }else if(pathName.startsWith('/admin-dashboard') && userRole !== 'ADMIN'){
+        return NextResponse.redirect(new URL('/not-found', request.url))
+    }else if(pathName.startsWith('/author-dashboard') && userRole !== 'AUTHOR'){
+        return NextResponse.redirect(new URL('/not-found', request.url))
+    }
+
+
     return NextResponse.next()
 }
 
