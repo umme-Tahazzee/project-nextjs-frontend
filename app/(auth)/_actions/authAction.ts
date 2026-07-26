@@ -44,7 +44,7 @@ export const loginAction = async (
   if (result.success) {
     const cookieStore = await cookies();
 
-    cookieStore.set("accessToken", result.data.acesstoken, {
+    cookieStore.set("accessToken", result.data.acessToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 24,
       sameSite: "lax",
@@ -56,9 +56,12 @@ export const loginAction = async (
     });
 
 
+    console.log("result", result.data.accessToken);
     
 
-    const decodedToken = jwt.decode(result.data.acesstoken) as JwtPayload
+    const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload
+
+    
     if(decodedToken.role === 'USER'){
         redirect('/user-dashboard');
     }else if(decodedToken.role === 'ADMIN'){
