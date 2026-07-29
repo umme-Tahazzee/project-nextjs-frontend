@@ -18,8 +18,8 @@ export async function MyPostsList() {
         views: 100,
         isPremium: false,
         authorId: "1",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        createdAt: "2026-07-29T00:00:00.000Z",
+        updatedAt: "2026-07-29T00:00:00.000Z",
       }
     ]
   };

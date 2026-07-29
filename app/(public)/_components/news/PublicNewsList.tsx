@@ -2,45 +2,25 @@
 
 import { IPost } from "@/lib/types";
 import { NewsCard } from "./NewsCard";
+import { cookies } from "next/headers";
+import { getPublicPost } from "../../_actions/getPublicPost";
 
 export async function PublicNewsList() {
+  const result = await getPublicPost();
 
-  const result = {
-    success: true,
-    data: [
-      {
-        id: "1",
-        title: "Public News 1",
-        content: "This is the content of public news 1.",
-        thumbnail: "https://via.placeholder.com/150",
-        isFeatured: true,
-        status: "PUBLISHED",
-        tags: ["tag1", "tag2"],
-        views: 100,
-        isPremium: false,
-        authorId: "1",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
-    ]
-  };
-
-  if (!result.success || !result.data?.length) {
+  if (!result?.success) {
     return (
-      <p className="py-12 text-center text-muted-foreground">
-        No news found.
-      </p>
+      <p className="py-12 text-center text-muted-foreground">No news found.</p>
     );
   }
 
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {result.data.map((post : IPost | any) => (
+        {result.data.map((post: IPost) => (
           <NewsCard key={post.id} post={post} />
         ))}
       </div>
-      
     </div>
   );
 }

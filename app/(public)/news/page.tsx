@@ -7,8 +7,7 @@ const News = () => {
     <div className='max-w-7xl mx-auto space-y-6 px-4 py-4 sm:px-6 sm:justify-between'>
        <div className='flex flex-col gap-4 '>
              <div>
-              <h1>Premium News</h1>
-             <p>Exculsive stories for our subscription</p>
+              <h1>Browse the lastest news:</h1>
              </div>
        </div>
 
