@@ -21,12 +21,7 @@ console.log(result, 'data')
             {result?.message || "Please subscribe to access premium news."}
           </p>
         </div>
-        <Link
-          href="/payment"
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
-        >
-          Go to payment
-        </Link>
+        
       </div>
     );
   }
