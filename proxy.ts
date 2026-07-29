@@ -6,7 +6,7 @@ import { jwtUtils } from './utils/jwt'
 import { getNewAccessToken } from './services/refreshToken'
 
 const AUTH_ROUTES = ['/login', '/register']
-const PUBLIC_ROUTES = ['/', '/news', '/premium', '/payment']
+const PUBLIC_ROUTES = ['/', '/news']
 
 export async function proxy(request: NextRequest) {
     const pathName = request.nextUrl.pathname
@@ -14,9 +14,9 @@ export async function proxy(request: NextRequest) {
 
     let accessToken = request.cookies.get('accessToken')?.value
     const refreshToken = request.cookies.get('refreshToken')?.value
-    const decodedAccessToken = accessToken ? jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string) : null
+    let decodedAccessToken = accessToken ? jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string) : null
     const decodeRefreshToken = refreshToken ? jwtUtils.verifyToken(refreshToken, process.env.JWT_REFRESH_SECRET as string) : null
-    console.log(decodedAccessToken);
+  
     
     if (!decodedAccessToken?.success && decodeRefreshToken?.success) {
 
@@ -29,6 +29,7 @@ export async function proxy(request: NextRequest) {
                 sameSite: 'lax'
             })
             accessToken = newAccessToken
+            decodedAccessToken = jwtUtils.verifyToken(newAccessToken, process.env.JWT_ACCESS_SECRET as string)
         }
     }
 
@@ -53,6 +54,8 @@ export async function proxy(request: NextRequest) {
         cookieStore.delete('accessToken')
         return NextResponse.redirect(new URL('/login', request.url))
     }
+
+
 
     // if(userRole === 'USER' && )
     // Authorization : role based access control
