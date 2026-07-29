@@ -22,9 +22,9 @@ export async function PricingSection() {
 
         </CardTitle>
         <CardDescription>
-           {isActive && statusResult.data.currentPeriodEnd
-            ?`Renew on date ${statusResult.data.currentPeriodEnd}.toLocalDateString()` : 
-            `Unlock every premium story`
+           {isActive && statusResult.data?.currentPeriodEnd
+            ? `Renew on date ${new Date(statusResult.data.currentPeriodEnd).toLocaleDateString()}` : 
+            "Unlock every premium story"
            }
 
         </CardDescription>
