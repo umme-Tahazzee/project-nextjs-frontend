@@ -2,21 +2,31 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckIcon } from "lucide-react";
 import { SubscribeButton } from "./SubscribeButton";
+import { getSubscriptionStatus } from "../../_actions/getSubscripeStatus";
 
-// import { SubscribeButton } from "./SubscribeButton";
+
 
 export async function PricingSection() {
+  const statusResult = await getSubscriptionStatus()
 
+  const isActive = Boolean(
+    statusResult.success && statusResult.data.isSubscribed
+  )
 
   return (
     <Card className="mx-auto max-w-md">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           Premium Plan
-          
+          {isActive && <Badge variant="default" className="bg-primary px-2.5 py-1 rounded-full text-white">Active</Badge> }
+
         </CardTitle>
         <CardDescription>
-          <h1>Unlock every premium story, cancel anytime.</h1>
+           {isActive && statusResult.data.currentPeriodEnd
+            ?`Renew on date ${statusResult.data.currentPeriodEnd}.toLocalDateString()` : 
+            `Unlock every premium story`
+           }
+
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -34,8 +44,8 @@ export async function PricingSection() {
             Support independent journalism
           </li>
         </ul>
-        {<SubscribeButton />}
-       
+        {!isActive && <SubscribeButton />}
+
       </CardContent>
     </Card>
   );

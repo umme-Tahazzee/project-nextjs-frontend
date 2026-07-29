@@ -68,6 +68,7 @@ export function Navbar({ user }: NavbarProps) {
       await logout();
       toast.success("User Logged Out Successfully!");
       router.push("/login");
+      router.refresh()
     }
   };
 
