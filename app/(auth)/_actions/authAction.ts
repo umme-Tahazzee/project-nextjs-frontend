@@ -14,10 +14,6 @@ export type LoginState = {
 };
 
 
-
-
-
-
 export const loginAction = async (
   prevState: LoginState,
   formData: FormData,
@@ -56,8 +52,6 @@ export const loginAction = async (
     });
 
 
-    console.log("result", result.data.accessToken);
-    
 
     const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload
 
