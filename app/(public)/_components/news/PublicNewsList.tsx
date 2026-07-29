@@ -2,7 +2,6 @@
 
 import { IPost } from "@/lib/types";
 import { NewsCard } from "./NewsCard";
-import { cookies } from "next/headers";
 import { getPublicPost } from "../../_actions/getPublicPost";
 
 export async function PublicNewsList() {

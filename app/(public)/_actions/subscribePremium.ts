@@ -23,7 +23,7 @@ export const subscribePremium = async () => {
     })
 
     const result = await res.json()
-    console.log(result);
+   
 
     if (result.success && result.data.paymentUrl) {
         redirect(result.data.paymentUrl)

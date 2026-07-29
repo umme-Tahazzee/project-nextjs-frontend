@@ -5,9 +5,18 @@ import { getPremiumNews } from "../../_actions/getPremiumNews";
 import { Lock } from "lucide-react";
 import Link from "next/link";
 
-export async function PremiumNewsList() {
- const result = await getPremiumNews()
-console.log(result, 'data')
+
+
+export async function PremiumNewsList({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+
+
+
+  const search = await searchParams
+ const result = await getPremiumNews({search})
 
   if (!result?.success) {
     return (
