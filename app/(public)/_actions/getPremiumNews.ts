@@ -6,16 +6,21 @@ type SearchParams = {
 };
 
 export const getPremiumNews = async ({
-    search,
+    query,
 }: {
-    search?: SearchParams;
+    query?: SearchParams;
 }) => {
 
 
+    //  const searchTerm = search?.searchTerm ? `?searchTerm=${search.searchTerm}` : "";
+    
+     const params = new URLSearchParams()
 
-    // const searchTerm = `${search?.searchTerm ? `?searchTerm=${search.searchTerm}` : ""}`;
-     const searchTerm = search?.searchTerm ? `?searchTerm=${search.searchTerm}` : "";
-    console.log(searchTerm, 'test');
+     if(query && query.searchTerm ){
+        params.set("searchTerm", query.searchTerm as string)
+     }
+
+   
     
     const cookieStore = await cookies()
     const accessToken = cookieStore.get('accessToken')?.value || null
@@ -27,7 +32,7 @@ export const getPremiumNews = async ({
         }
     }
 
-    const res = await fetch(`${process.env.BACKEND_API_URL}api/premium${searchTerm}`, {
+    const res = await fetch(`${process.env.BACKEND_API_URL}api/premium?${params.toString()}`, {
         cache: 'force-cache',
         headers: {
             Cookie: `accessToken=${accessToken}`

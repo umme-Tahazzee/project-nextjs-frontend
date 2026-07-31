@@ -28,7 +28,7 @@ export function NewsCard({ post }: NewsCardProps) {
         <CardHeader>
           <div className="flex flex-wrap items-center gap-1.5">
             {post.isPremium && (
-              <Badge >
+              <Badge className="bg-red-500 rounded-full p-1">
                 <SparklesIcon data-icon="inline-start" />
                 Premium
               </Badge>

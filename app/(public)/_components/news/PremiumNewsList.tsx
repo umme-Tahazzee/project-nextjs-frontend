@@ -3,9 +3,6 @@ import { NewsCard } from "./NewsCard";
 import { IPost } from "@/lib/types";
 import { getPremiumNews } from "../../_actions/getPremiumNews";
 import { Lock } from "lucide-react";
-import Link from "next/link";
-
-
 
 export async function PremiumNewsList({
   searchParams,
@@ -14,9 +11,8 @@ export async function PremiumNewsList({
 }) {
 
 
-
-  const search = await searchParams
- const result = await getPremiumNews({search})
+ const query = await searchParams
+ const result = await getPremiumNews({query})
 
   if (!result?.success) {
     return (
